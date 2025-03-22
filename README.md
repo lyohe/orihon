@@ -2,6 +2,13 @@
 
 Orihon is a simple static site generator written in Go, designed to compile Markdown files into a single-page HTML document with a built-in Table of Contents.
 
+![Screenshot](https://github.com/user-attachments/assets/5109c8bd-cc18-419d-9965-20bf45a0ee25)
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f606da9b-1ece-4761-bcf1-304db61b8f25" width="48%" />
+  <img src="https://github.com/user-attachments/assets/174beb5a-2144-4a83-b3de-360a4c8f18af" width="48%" />
+</p>
+
 ## Features
 
 - **Single-Page HTML Generation**  
