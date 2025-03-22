@@ -1,0 +1,27 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+.logo {
+  margin-bottom: 20px;
+  border-bottom: none;
+}
+
+.sidebar {
+  float: left;
+  width: 200px;
+  background-color: transparent;
+}
+
+.content {
+  margin-left: 220px;
+  line-height: 1.4;
+}
+
+/* Base-specific CSS identifier */
+.base-css-identifier {
+  display: none;
+}

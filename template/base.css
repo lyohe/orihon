@@ -1,0 +1,758 @@
+/* 
+ * Orihon CSS Styles
+ * This stylesheet defines the appearance of the single-page documentation generator
+ */
+
+/* 
+ * Color Variables
+ * Using CSS variables for consistent theming and easy dark/light mode switching
+ */
+:root {
+  --gray-0: #ffffff;
+  --gray-1: #fcfcfc;
+  --gray-2: #f9f9f9;
+  --gray-3: #f0f0f0;
+  --gray-4: #e8e8e8;
+  --gray-5: #e0e0e0;
+  --gray-6: #d9d9d9;
+  --gray-7: #cecece;
+  --gray-8: #bbbbbb;
+  --gray-9: #8d8d8d;
+  --gray-10: #838383;
+  --gray-11: #4b4b4b;
+  --gray-12: #202020;
+
+  --gray-alpha-3: #0000000e;
+
+  --primary-9: #0090ffff;
+}
+
+/* 
+ * Dark Mode Colors
+ * Inverts the color scheme when the user prefers dark mode
+ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --gray-0: #000000;
+    --gray-1: #111111;
+    --gray-2: #191919;
+    --gray-3: #222222;
+    --gray-4: #2a2a2a;
+    --gray-5: #313131;
+    --gray-6: #3a3a3a;
+    --gray-7: #484848;
+    --gray-8: #606060;
+    --gray-9: #6e6e6e;
+    --gray-10: #7b7b7b;
+    --gray-11: #cccccc;
+    --gray-12: #eeeeee;
+
+    --gray-alpha-3: #ffffff21;
+
+    --primary-9: #ffe629ff;
+  }
+}
+
+/* 
+ * Base Element Styles
+ * Reset and base styling for all elements
+ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--gray-0);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* 
+ * Layout Structure
+ * Defines the main container and layout grid
+ */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+main {
+  flex: 1;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* 
+ * Sidebar / Navigation
+ * Styles for the left sidebar containing the table of contents
+ */
+nav.left-pane {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  width: 300px;
+  transition: transform 0.3s ease, width 0.3s ease;
+}
+
+/* When sidebar is collapsed, move it off-screen */
+nav.left-pane.collapsed {
+  transform: translateX(-300px);
+  width: 0;
+}
+
+/* Sticky header at the top of the sidebar */
+nav.left-pane .top-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+nav.left-pane .top {
+  backdrop-filter: blur(10px);
+  background: linear-gradient(
+    var(--gray-0),
+    color-mix(in srgb, var(--gray-0), transparent 50%)
+  );
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 12px 16px;
+  gap: 4px;
+}
+
+nav.left-pane header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--gray-12);
+  font-size: 15px;
+  line-height: 20px;
+}
+
+nav.left-pane .logo a {
+  display: block;
+  color: var(--gray-12);
+}
+
+nav.left-pane .logo a svg {
+  display: block;
+}
+
+/* Adjust logo colors for dark mode */
+@media (prefers-color-scheme: dark) {
+  nav.left-pane .logo a svg path {
+    stroke: var(--primary-9); /* Use the yellow primary color in dark mode */
+  }
+
+  nav.left-pane .logo a svg text {
+    fill: var(--gray-12); /* Use light gray for text in dark mode */
+  }
+}
+
+nav.left-pane .spacer {
+  flex: 1;
+}
+
+/* Main sidebar content area */
+div.side {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 0 16px 16px 16px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--gray-11);
+}
+
+/* 
+ * Sidebar Toggle Controls
+ * Buttons to show/hide the sidebar
+ */
+.sidebar-toggle {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-11);
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.sidebar-toggle:hover {
+  background-color: var(--gray-3);
+  color: var(--gray-12);
+}
+
+/* Toggle button that appears when sidebar is collapsed */
+.sidebar-collapsed-toggle {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-11);
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: var(--gray-2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-collapsed-toggle svg {
+  width: 28px;
+  height: 28px;
+}
+
+.sidebar-collapsed-toggle:hover {
+  background-color: var(--gray-3);
+  color: var(--gray-12);
+  transform: scale(1.05);
+}
+
+.sidebar-collapsed-toggle.hidden {
+  display: none;
+}
+
+/* Icons for collapse/expand functionality */
+.collapse-icon,
+.expand-icon {
+  transition: transform 0.3s ease;
+  width: 28px;
+  height: 28px;
+}
+
+/* Utility class to hide elements */
+.hidden {
+  display: none !important;
+}
+
+/* 
+ * Table of Contents (TOC)
+ * Styles for the navigation menu in the sidebar
+ */
+.toc,
+.toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Indentation levels for TOC hierarchy */
+.toc-item.indent-0 {
+  margin-left: 0;
+}
+.toc-item.indent-1 {
+  margin-left: 16px;
+}
+.toc-item.indent-2 {
+  margin-left: 32px;
+}
+.toc-item.indent-3 {
+  margin-left: 48px;
+}
+
+.toc li {
+  margin: 4px 0;
+}
+
+.toc-item {
+  margin-bottom: 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* TOC link styling */
+.toc-item a {
+  text-decoration: none;
+  color: var(--gray-11);
+  display: block;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.toc-item a:hover {
+  background-color: var(--gray-3);
+  color: var(--gray-12);
+}
+
+/* Highlight for the currently active section */
+.toc-item a.target {
+  background-color: var(--primary-9);
+  color: var(--gray-0);
+  font-weight: 500;
+}
+
+/* Allow text wrapping in TOC items */
+.toc-item,
+.toc-item a,
+.toc details summary,
+.toc details summary a {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* 
+ * Collapsible TOC Sections
+ * Styles for expandable/collapsible sections in the TOC
+ */
+.toc details {
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.toc details summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 6px 8px;
+  border-radius: 4px;
+  color: var(--gray-11);
+  display: flex;
+  align-items: center;
+  width: 100%;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.toc details summary:hover {
+  background-color: var(--gray-3);
+  color: var(--gray-12);
+}
+
+/* Remove padding from links inside summary to prevent double padding */
+.toc details summary a {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  color: inherit;
+  width: auto;
+  flex-grow: 1;
+}
+
+/* Highlight for the currently active section in a collapsible menu */
+.toc details summary:has(a.target) {
+  background-color: var(--primary-9);
+  color: var(--gray-0);
+}
+
+/* Change arrow color when section is highlighted */
+.toc details summary:has(a.target)::before {
+  background-color: var(--gray-0);
+}
+
+/* Allow text wrapping in collapsible sections */
+.toc details summary,
+.toc details summary a {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* Remove default disclosure triangle */
+.toc details summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Custom arrow indicator for collapsible sections */
+.toc details summary::before {
+  content: "";
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath d='M9 6L15 12L9 18'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath d='M9 6L15 12L9 18'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: var(--gray-11);
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  transition: transform 0.2s ease;
+}
+
+/* Change arrow direction when section is open */
+.toc details[open] > summary::before {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.toc details summary:hover::before {
+  background-color: var(--gray-12);
+}
+
+.toc details summary::after {
+  content: none;
+}
+
+.toc details summary:hover::after {
+  border-color: var(--gray-12);
+}
+
+.toc details summary:hover {
+  background-color: var(--gray-3);
+  color: var(--gray-12);
+}
+
+/* 
+ * Main Content Area
+ * Styles for the article and content display
+ */
+article {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+article .content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 950px;
+  padding: 48px 64px;
+  color: var(--gray-11);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+/* 
+ * Content Details/Summary Elements
+ * Styles for collapsible sections in the main content
+ */
+.content details {
+  margin-bottom: 16px;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+.content details > summary {
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--gray-12);
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.content details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Remove default marker since we're using a custom icon */
+.content details > summary::before {
+  content: none;
+}
+
+/* Custom collapse/expand icon for content sections */
+.collapse-expand-icon {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: var(--gray-11);
+  display: inline-block;
+  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+/* Rotate icon when section is open */
+details[open] .collapse-expand-icon {
+  transform: rotate(180deg);
+}
+
+.content details:hover .collapse-expand-icon {
+  background-color: var(--gray-12);
+}
+
+.collapse-expand-icon::before {
+  content: none;
+}
+
+.content details:hover .collapse-expand-icon::before {
+  border-color: var(--gray-12);
+}
+
+/* 
+ * Heading Styles
+ * Different sizes for various heading levels
+ */
+.content details > summary[data-level="1"] {
+  font-size: 48px;
+  line-height: 54px;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.content details > summary[data-level="2"] {
+  font-size: 32px;
+  line-height: 36px;
+  margin-top: 40px;
+  margin-bottom: 16px;
+}
+
+.content details > summary[data-level="3"] {
+  font-size: 24px;
+  line-height: 32px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* 
+ * Direct Heading Styles (h1-h6)
+ * GitHub-inspired styling for all heading levels
+ */
+.content h1 {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  color: var(--gray-12);
+}
+
+.content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  padding-bottom: 0.3em;
+  color: var(--gray-12);
+}
+
+.content h3 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  color: var(--gray-12);
+}
+
+.content h4 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  color: var(--gray-12);
+}
+
+.content h5 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  color: var(--gray-12);
+}
+
+.content h6 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  color: var(--gray-9);
+}
+
+/* 
+ * Anchor Links
+ * Styles for heading anchor links and icons
+ */
+.anchor {
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.anchor:hover {
+  text-decoration: none;
+}
+
+/* Link icon that appears on hover */
+.link-icon {
+  display: inline-block;
+  margin-left: 8px;
+  opacity: 0; /* Hidden by default, shown on hover */
+  vertical-align: middle;
+  transition: opacity 0.2s ease;
+}
+
+.link-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Show link icon when hovering over headings */
+summary:hover .link-icon,
+.heading-anchor:hover .link-icon {
+  opacity: 1;
+}
+
+/* 
+ * Code Formatting
+ * Styles for code blocks and inline code
+ */
+pre {
+  background-color: var(--gray-2);
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.9em;
+  background-color: var(--gray-2);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+/* Remove background from code inside pre blocks to avoid double backgrounds */
+pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* 
+ * Heading Anchor Links
+ * Styles for clickable heading links with hover effects
+ */
+.heading-anchor {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.heading-anchor:hover .link-icon {
+  opacity: 1;
+}
+
+/* 
+ * Dark Mode Adjustments
+ * Additional styles specific to dark mode
+ */
+@media (prefers-color-scheme: dark) {
+  .toc details summary::before,
+  .collapse-expand-icon {
+    background-color: var(--gray-11);
+  }
+
+  .toc details summary:hover::before,
+  .content details:hover .collapse-expand-icon {
+    background-color: var(--gray-12);
+  }
+}
+
+/* 
+ * Responsive Design
+ * Adjustments for smaller screens and mobile devices
+ */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  nav.left-pane {
+    width: 100%;
+    max-height: 300px;
+  }
+
+  /* Collapse upward instead of to the side on small screens */
+  nav.left-pane.collapsed {
+    transform: translateY(-300px);
+    max-height: 0;
+  }
+
+  /* Reduce padding on small screens */
+  article .content {
+    padding: 24px 16px;
+  }
+
+  /* Smaller headings on mobile */
+  .content details > summary[data-level="1"] {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .content details > summary[data-level="2"] {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .content details > summary[data-level="3"] {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  /* Mobile styles for direct headings */
+  .content h1 {
+    font-size: 28px;
+    line-height: 1.25;
+  }
+
+  .content h2 {
+    font-size: 22px;
+    line-height: 1.25;
+  }
+
+  .content h3 {
+    font-size: 18px;
+    line-height: 1.25;
+  }
+
+  .content h4 {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+
+  .content h5,
+  .content h6 {
+    font-size: 14px;
+    line-height: 1.25;
+  }
+
+  /* Adjust toggle button position */
+  .sidebar-collapsed-toggle {
+    top: 8px;
+    left: 8px;
+  }
+}

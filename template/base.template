@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .Title }}</title>
+  <style>{{ .InlineCss }}</style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <nav class="left-pane" id="sidebar">
+      <div class="top-wrapper">
+        <div class="top">
+          <header>
+            <div class="logo">
+              <a href="{{ .LogoLink }}">
+                {{ .LogoHTML }}
+              </a>
+            </div>
+            <div class="spacer"></div>
+              <div class="sidebar-toggle" id="sidebar-toggle">
+                <!-- Collapse icon (shown when sidebar is expanded) -->
+                <svg class="collapse-icon" width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <!-- Expand icon (shown when sidebar is collapsed) -->
+                <svg class="expand-icon hidden" width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+          </header>
+        </div>
+      </div>
+      
+      <!-- Sidebar menu (table of contents) -->
+      <div class="side">
+        {{ .Sidebar }}
+      </div>
+    </nav>
+
+    <!-- Main content area -->
+    <main>
+      <article>
+        <div id="sidebar-collapsed-toggle" class="sidebar-collapsed-toggle hidden">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="content">
+          {{ .Content }}
+        </div>
+      </article>
+    </main>
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // Add anchor links to headings
+    const headings = document.querySelectorAll('.content h1, .content h2, .content h3, .content h4, .content h5, .content h6');
+
+      headings.forEach(heading => {
+        const id = heading.id;
+        if (!id) return; // Skip headings without ID
+
+        // Create anchor link
+        const anchor = document.createElement('a');
+        anchor.href = `#${id}`;
+        anchor.className = 'heading-anchor'; // Any class name is OK
+
+        // Example of embedding a link icon
+        const linkIcon = document.createElement('span');
+        linkIcon.className = 'link-icon';
+        linkIcon.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        `;
+
+        // Insert icon into anchor
+        anchor.appendChild(linkIcon);
+
+        // Add anchor to the end of heading
+        // (The idea is to place a small icon after the heading text)
+        heading.appendChild(anchor);
+      });
+
+  document.querySelectorAll('.content h1, .content h2, .content h3, .content h4, .content h5, .content h6')
+    .forEach(heading => {
+      const id = heading.id;
+      if (!id) return;
+
+      // (1) Store heading text and empty the heading
+      const headingText = heading.textContent; // e.g. "Using GraphQL.js" etc.
+      heading.textContent = '';
+
+      // (2) Create an anchor <a> to make the entire heading clickable
+      const anchor = document.createElement('a');
+      anchor.href = `#${id}`;
+      anchor.className = 'heading-anchor';  // Will be adjusted with CSS later
+
+      // (3) Create a <span> for the text part and put the original heading text in it
+      const textSpan = document.createElement('span');
+      textSpan.className = 'heading-text';
+      textSpan.textContent = headingText;
+
+      // (4) Create a <span> for the icon and put an SVG icon in it
+      const iconSpan = document.createElement('span');
+      iconSpan.className = 'link-icon';
+      iconSpan.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `;
+
+      // (5) Add text and icon to the anchor, then put it back in the heading
+      anchor.appendChild(textSpan);
+      anchor.appendChild(iconSpan);
+      heading.appendChild(anchor);
+    });
+
+    // Add anchor links to headings
+    document.querySelectorAll('.content summary').forEach(summary => {
+      const id = summary.id;
+      if (id) {
+        // Create anchor element
+        const anchor = document.createElement('a');
+        anchor.className = 'anchor';
+        anchor.href = `#${id}`;
+        
+        // Add link icon
+        const linkIcon = document.createElement('span');
+        linkIcon.className = 'link-icon';
+        linkIcon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`;
+        
+        // Add collapse/expand icon
+        const collapseExpandIcon = document.createElement('span');
+        collapseExpandIcon.className = 'collapse-expand-icon';
+        
+        // Move the content of the summary into the anchor
+        anchor.innerHTML = summary.textContent;
+        summary.textContent = '';
+        summary.appendChild(collapseExpandIcon);
+        summary.appendChild(anchor);
+        summary.appendChild(linkIcon);
+      }
+    });
+
+    // Handle sidebar link clicks
+    document.querySelectorAll('.toc a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        // Remove target class from all links
+        document.querySelectorAll('.toc a').forEach(a => {
+          a.classList.remove('target');
+        });
+        
+        // Add target class to clicked link
+        link.classList.add('target');
+        
+        // Get the target element
+        const targetId = link.getAttribute('href').substring(1);
+        const target = document.getElementById(targetId);
+        
+        // Open the details element if it's closed
+        if (target) {
+          const parentDetails = target.closest('details');
+          if (parentDetails) {
+            parentDetails.open = true;
+          }
+        }
+      });
+    });
+
+    // Highlight corresponding element when URL hash changes
+    function highlightTarget() {
+      // Remove target class from all links
+      document.querySelectorAll('.toc a').forEach(a => {
+        a.classList.remove('target');
+      });
+      
+      const hash = window.location.hash;
+      if (hash) {
+        // Add target class to the link that matches the hash
+        const link = document.querySelector(`.toc a[href="${hash}"]`);
+        if (link) {
+          link.classList.add('target');
+        }
+        
+        // Find the target element and open its details
+        const target = document.querySelector(hash);
+        if (target) {
+          const parentDetails = target.closest('details');
+          if (parentDetails) {
+            parentDetails.open = true;
+          }
+        }
+      }
+    }
+
+    // Highlight on initial load and when hash changes
+    highlightTarget();
+    window.addEventListener('hashchange', highlightTarget);
+    
+    // Open the first details element by default
+    const firstDetails = document.querySelector('.content details');
+    if (firstDetails) {
+      firstDetails.open = true;
+    }
+    
+    // Sidebar collapse functionality
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebarCollapsedToggle = document.getElementById('sidebar-collapsed-toggle');
+    const collapseIcon = document.querySelector('.collapse-icon');
+    const expandIcon = document.querySelector('.expand-icon');
+    
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.add('collapsed');
+      sidebarCollapsedToggle.classList.remove('hidden');
+      collapseIcon.classList.add('hidden');
+      expandIcon.classList.remove('hidden');
+    });
+    
+    sidebarCollapsedToggle.addEventListener('click', () => {
+      sidebar.classList.remove('collapsed');
+      sidebarCollapsedToggle.classList.add('hidden');
+      collapseIcon.classList.remove('hidden');
+      expandIcon.classList.add('hidden');
+    });
+    
+    // Expand menu above selected option
+    document.querySelectorAll('.toc details').forEach(details => {
+      const summary = details.querySelector('summary');
+      if (summary) {
+        summary.addEventListener('click', (e) => {
+          // Prevent default toggle behavior
+          e.preventDefault();
+          
+          // Toggle the details element
+          details.open = !details.open;
+          
+          // If opening, scroll to make sure it's visible above the selected item
+          if (details.open) {
+            const rect = summary.getBoundingClientRect();
+            const isInViewport = rect.top >= 0 && rect.bottom <= window.innerHeight;
+            
+            if (!isInViewport) {
+              summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        });
+      }
+    });
+
+    // Expand sidebar and highlight when main content headings are clicked
+    document.querySelectorAll('.content .heading-anchor').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const id = anchor.getAttribute('href').substring(1);
+        const sidebarLink = document.querySelector(`.toc a[href="#${id}"]`);
+
+        if (sidebarLink) {
+          // Remove highlight from all links
+          document.querySelectorAll('.toc a').forEach(a => a.classList.remove('target'));
+
+          // Highlight the sidebar link corresponding to the clicked heading
+          sidebarLink.classList.add('target');
+
+          // If the link is collapsed, open all parent details
+          let parentDetails = sidebarLink.closest('details');
+          while (parentDetails) {
+            parentDetails.open = true;
+            parentDetails = parentDetails.parentElement.closest('details');
+          }
+        }
+      });
+    });
+  });
+  </script>
+</body>
+</html>

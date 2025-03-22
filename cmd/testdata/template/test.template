@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ .Title }}</title>
+  <style>{{ .InlineCss }}</style>
+</head>
+<body>
+  <div class="logo"><a href="{{ .LogoLink }}">{{ .LogoHTML }}</a></div>
+  <div class="sidebar">{{ .Sidebar }}</div>
+  <div class="content">{{ .Content }}</div>
+</body>
+</html>

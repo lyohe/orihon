@@ -1,0 +1,30 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 30px;
+  background-color: #f5f5f5;
+}
+
+.logo {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.sidebar {
+  float: left;
+  width: 250px;
+  background-color: #eee;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.content {
+  margin-left: 280px;
+  line-height: 1.6;
+}
+
+/* Test-specific CSS identifier */
+.test-css-identifier {
+  display: none;
+}
